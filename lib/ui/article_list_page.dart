@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../data/api_service.dart/api_service.dart';
+import '../data/api.dart/api_service.dart';
 import '../data/model/article.dart';
 import '../widgets/card_article.dart';
 import '../widgets/platform_widget.dart';

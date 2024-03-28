@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/api_service.dart/api_service.dart';
+import '../data/api.dart/api_service.dart';
 import '../data/model/article.dart';
 
 enum ResultState { loading, noData, hasData, error }
