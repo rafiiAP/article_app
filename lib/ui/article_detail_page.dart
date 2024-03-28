@@ -20,15 +20,10 @@ class ArticleDetailPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Hero(
-              tag: article.urlToImage.isEmpty || article.urlToImage == 'null'
+            Image.network(
+              article.urlToImage.isEmpty || article.urlToImage == 'null'
                   ? 'https://images.tokopedia.net/img/KRMmCm/2023/8/29/360dbc5b-92c5-4e07-919f-7338969b4447.png'
                   : article.urlToImage,
-              child: Image.network(
-                article.urlToImage.isEmpty || article.urlToImage == 'null'
-                    ? 'https://images.tokopedia.net/img/KRMmCm/2023/8/29/360dbc5b-92c5-4e07-919f-7338969b4447.png'
-                    : article.urlToImage,
-              ),
             ),
             Padding(
               padding: const EdgeInsets.all(10),

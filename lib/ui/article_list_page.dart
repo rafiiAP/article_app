@@ -1,33 +1,27 @@
+import 'package:article_app/provider/news_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../data/api_service.dart/api_service.dart';
 import '../data/model/article.dart';
 import '../widgets/card_article.dart';
 import '../widgets/platform_widget.dart';
 
-class ArticleListPage extends StatefulWidget {
+class ArticleListPage extends StatelessWidget {
   const ArticleListPage({Key? key}) : super(key: key);
+  // late Future<ArticlesResult> _article;
 
-  @override
-  State<ArticleListPage> createState() => _ArticleListPageState();
-}
-
-class _ArticleListPageState extends State<ArticleListPage> {
-  late Future<ArticlesResult> _article;
-
-  @override
-  void initState() {
-    super.initState();
-    _article = ApiService().topHeadlines();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _article = ApiService().topHeadlines();
+  // }
 
   Widget _buildList(BuildContext context) {
-    return FutureBuilder(
-      future: _article,
-      builder: (context, AsyncSnapshot<ArticlesResult> snapshot) {
-        var state = snapshot.connectionState;
-        if (state == ConnectionState.waiting) {
+    return Consumer<NewsProvider>(
+      builder: (context, state, child) {
+        if (state.state == ResultState.loading) {
           return const Center(
             child: SizedBox(
               height: 50,
@@ -36,19 +30,25 @@ class _ArticleListPageState extends State<ArticleListPage> {
             ),
           );
         } else {
-          if (snapshot.hasData) {
+          if (state.state == ResultState.hasData) {
             return ListView.builder(
               shrinkWrap: true,
-              itemCount: snapshot.data?.articles.length,
+              itemCount: state.result.articles.length,
               itemBuilder: (context, index) {
-                var article = snapshot.data?.articles[index];
-                return CardArticle(article: article!);
+                var article = state.result.articles[index];
+                return CardArticle(article: article);
               },
             );
-          } else if (snapshot.hasError) {
+          } else if (state.state == ResultState.noData) {
             return Center(
               child: Material(
-                child: Text(snapshot.error.toString()),
+                child: Text(state.message.toString()),
+              ),
+            );
+          } else if (state.state == ResultState.error) {
+            return Center(
+              child: Material(
+                child: Text(state.message.toString()),
               ),
             );
           } else {
