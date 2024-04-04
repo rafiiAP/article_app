@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/api.dart/api_service.dart';
 import '../data/model/article.dart';
-
-enum ResultState { loading, noData, hasData, error }
+import '../utils/result_state.dart';
 
 class NewsProvider extends ChangeNotifier {
   final ApiService apiService;
@@ -17,7 +16,9 @@ class NewsProvider extends ChangeNotifier {
   String _message = '';
 
   String get message => _message;
+
   ArticlesResult get result => _articlesResult;
+
   ResultState get state => _state;
 
   Future<dynamic> _fetchAllArticle() async {

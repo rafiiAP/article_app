@@ -1,17 +1,14 @@
 import 'dart:io';
 
-import 'package:article_app/data/api.dart/api_service.dart';
-import 'package:article_app/provider/news_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../common/style.dart';
-import '../provider/scheduling_provider.dart';
 import '../utils/notification_helper.dart';
 import '../widgets/platform_widget.dart';
 import 'article_detail_page.dart';
 import 'article_list_page.dart';
+import 'bookmarks_page.dart';
 import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,38 +22,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _bottomNavIndex = 0;
-  final NotificationHelper _notificationHelper = NotificationHelper();
-
   static const String _headlineText = 'Headline';
 
+  final NotificationHelper _notificationHelper = NotificationHelper();
+
   final List<Widget> _listWidget = [
-    ChangeNotifierProvider<NewsProvider>(
-      create: (_) => NewsProvider(apiService: ApiService()),
-      child: const ArticleListPage(),
-    ),
-    ChangeNotifierProvider<SchedulingProvider>(
-      create: (_) => SchedulingProvider(),
-      child: const SettingsPage(),
-    ),
+    const ArticleListPage(),
+    const BookmarksPage(),
+    const SettingsPage(),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    _notificationHelper
-        .configureSelectNotificationSubject(ArticleDetailPage.routeName);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    selectNotificationSubject.close();
-  }
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
       icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
       label: _headlineText,
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Platform.isIOS
+          ? CupertinoIcons.bookmark
+          : Icons.collections_bookmark),
+      label: BookmarksPage.bookmarksTitle,
     ),
     BottomNavigationBarItem(
       icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
@@ -92,6 +77,19 @@ class _HomePageState extends State<HomePage> {
         return _listWidget[index];
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(ArticleDetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    selectNotificationSubject.close();
+    super.dispose();
   }
 
   @override
